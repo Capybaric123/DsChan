@@ -1,0 +1,47 @@
+body {
+    background-color: #eef2ff;
+    color: #333333;
+    font-family: Arial, sans-serif;
+}
+
+h1, h2, h3 {
+    color: #2e8b57;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:hover {
+    color: #000;
+}
+
+form {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f0f4f8;
+    border: 1px solid #ccc;
+    max-width: 500px;
+}
+
+img {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}

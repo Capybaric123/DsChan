@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ board_name }} - Minecrafters@home</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6e6e6;
+            color: #000;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Header Styling */
+        h1 {
+            font-size: 1.2em;
+            color: #222;
+            margin: 10px;
+            text-align: center;
+        }
+
+        /* Centered Form Styling */
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        form {
+            background-color: #e4e0f7;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            width: 600px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        label {
+            font-weight: bold;
+            color: #000;
+            margin-right: 5px;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            font-size: 13px;
+            padding: 3px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .file-upload {
+            border: 2px dashed #aaa;
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 13px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .file-upload.hover {
+            border-color: #666;
+            background-color: #f0f0ff;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        button {
+            font-size: 12px;
+            padding: 5px 10px;
+            background-color: #d3d3f9;
+            border: 1px solid #a3a3c2;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #bfbfff;
+        }
+
+        /* Posts Styling */
+        .post {
+            background-color: #f8f8ff;
+            border: 1px solid #ccc;
+            padding: 8px;
+            margin: 8px;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .post strong {
+            color: #444;
+            font-weight: bold;
+        }
+
+        .post img {
+            max-width: 225px;
+            height: auto;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .post h3 {
+            font-size: 1em;
+            color: #666;
+        }
+
+        /* Disclaimer */
+        footer {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Board Name -->
+    <h1>/{{ board }} / {{ board_name }}</h1>
+
+    <!-- Centered Thread Creation Form -->
+    <div class="form-container">
+        <form id="create-thread-form" method="POST" enctype="multipart/form-data" autocomplete="off">
+            <table>
+                <tr>
+                    <td><label for="name">Name</label></td>
+                    <td><input type="text" id="name" name="name" placeholder="Anonymous"></td>
+                </tr>
+                <tr>
+                    <td><label for="email">Email</label></td>
+                    <td><input type="text" id="email" name="email"></td>
+                </tr>
+                <tr>
+                    <td><label for="title">Subject</label></td>
+                    <td>
+                        <input type="text" id="title" name="title">
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="message">Comment *</label></td>
+                    <td><textarea id="message" name="text" rows="5" placeholder="Type here" required></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="file">File*</label></td>
+                    <td>
+                        <div class="file-upload" id="file-upload">
+                            <span>Drag & drop files here, or click to upload</span>
+                            <input type="file" id="file" name="image">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Display Posts -->
+    {% for post in posts[::-1] %}
+    <div class="post">
+        <strong>{{ post.name if post.name else 'Anonymous' }}</strong>
+        <h3>{{ post.title if post.title else '' }}</h3>
+        <p>{{ post.text }}</p>
+        {% if post.image %}
+        <img src="{{ url_for('static', filename='uploads/' + post.image) }}" alt="Post image">
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <!-- Disclaimer -->
+    <footer>
+        Disclaimer: Posts do not necessarily reflect the views of the administration.
+    </footer>
+
+    <!-- Drag & Drop JavaScript -->
+    <script>
+        const fileUploadBox = document.getElementById('file-upload');
+        const fileInput = document.getElementById('file');
+
+        // Highlight drop zone on dragover
+        fileUploadBox.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadBox.classList.add('hover');
+        });
+
+        // Remove highlight on dragleave
+        fileUploadBox.addEventListener('dragleave', () => {
+            fileUploadBox.classList.remove('hover');
+        });
+
+        // Handle drop event
+        fileUploadBox.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadBox.classList.remove('hover');
+            const files = e.dataTransfer.files;
+            fileInput.files = files;
+            fileUploadBox.querySelector('span').textContent = files[0].name;
+        });
+
+        // Update file name on manual selection
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileUploadBox.querySelector('span').textContent = fileInput.files[0].name;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecrafters@gg</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #000000;
+        }
+        .board {
+            padding: 10px;
+            border-bottom: 1px solid #cccccc;
+        }
+        .board a {
+            text-decoration: none;
+            color: #0000ff;
+        }
+        .recent-threads {
+            margin-top: 20px;
+        }
+        .recent-threads h3 {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minecrafters@gg</h1>
+
+    <h2>Boards</h2>
+    <div>
+        {% for board in boards %}
+            <div class="board">
+                <a href="{{ url_for('board', board=board) }}">/{{ board }}/</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="recent-threads">
+        <h3>Recent Threads</h3>
+        <ul>
+            {% for thread in recent_threads %}
+                <li><a href="{{ url_for('board', board=thread.board) }}">/{{ thread.board }}/ - {{ thread.text[:50] }}...</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
