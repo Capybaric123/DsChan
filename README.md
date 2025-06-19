@@ -1,14 +1,36 @@
-# DsChan
+This is a simple [PHP](https://php.org/) application starter
 
-This is a imageboard software made in python and html, it is a simple version of more advanced python imageboard softwares which might require some specific hardware.
+## Getting Started
 
-## Requierments
+Modify the logic of your the PHP application in the `app/index.php` file.
 
-1. Python version 3 or above
-2. Flask python module
+```console
+$ echo '<?php phpinfo() ?>' > ./app/index.php
+```
 
-## Instalation
+You can run things locally with:
 
-First install the imageboard from github.
+```
+$ php -t app -S localhost:8080
+```
 
-Second open the folder on your server or a pc and just double click the app.py and use it.
+Or you can also use `wasmer run` to run it locally (check out the [Wasmer install guide](https://docs.wasmer.io/install)):
+
+```console
+$ wasmer run .
+```
+
+Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
+
+
+## Deploy on Wasmer Edge
+
+The easiest way to deploy your PHP app is to use the [Wasmer Edge](https://wasmer.io/products/edge).
+
+Live example: https://Dschan-wasmer-examples.wasmer.app/
+
+Run this commmand to deploy to Wasmer Edge:
+
+```bash
+wasmer deploy
+```
